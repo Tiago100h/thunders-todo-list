@@ -1,0 +1,28 @@
+.task-form-field {
+  width: 100%;
+}
+
+.todo-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.todo-item button {
+  transition: all 200ms;
+  opacity: 0;
+  translate: 50px;
+}
+
+.todo-item:hover button {
+  opacity: 1;
+  translate: 0;
+}
+
+.checkedList {
+  margin-top: 2rem;
+}
+
+::ng-deep .mat-mdc-checkbox-checked .mdc-form-field {
+  text-decoration-line: line-through;
+}

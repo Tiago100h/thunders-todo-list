@@ -1,0 +1,6 @@
+@ThundersTodoList.Api_HostAddress = http://localhost:5249
+
+GET {{ThundersTodoList.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "PasswordThunders123"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"
+
+  server:
+    image: thunders-api
+    build:
+      context: thunders-todo-list-backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=ThundersDb;User=sa;Password=PasswordThunders123;TrustServerCertificate=True
+    ports:
+      - "5050:8080"
+      - "5051:8081"
+
+  web:
+    build:
+      context: thunders-todo-list-frontend
+      target: builder
+    ports:
+      - 4200:4200
+    volumes:
+      - ./angular:/project
+      - /project/node_modules

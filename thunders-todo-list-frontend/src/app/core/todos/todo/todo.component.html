@@ -1,0 +1,77 @@
+<form (ngSubmit)="onSubmit()">
+  <mat-form-field class="task-form-field">
+    <mat-label>{{idTodo ? 'Edit todo': 'New todo'}}</mat-label>
+    <input 
+      #todoTitleInput
+      matInput 
+      [(ngModel)]="todoAdd.title" 
+      [ngModelOptions]="{standalone: true}" 
+      maxlength="100" 
+      (keydown)="onKeydownInput($event)"
+    />
+    @if (idTodo) {
+      <button matSuffix mat-icon-button type="button" (click)="exitEditMode()">
+        <mat-icon>cancel</mat-icon>
+      </button>
+    }
+    @if (todoAdd.title) {
+      <button matSuffix mat-icon-button type="submit">
+        <mat-icon>{{idTodo ? 'save' : 'add'}}</mat-icon>
+      </button>
+    }
+    <mat-hint align="end">{{todoAdd.title.length}} / 100</mat-hint>
+  </mat-form-field>
+</form>
+
+@for (task of uncheckedList; track task.id) {
+<div 
+  class="todo-item" 
+  [@fadeOutDownOnLeave] 
+  [@fadeInUpOnEnter] 
+  [@headShake]="{ value: (animState && task.id == idTodoDeleting) }" 
+  (@headShake.done)="animDone()"
+>
+  <mat-checkbox (change)="onCheckboxChange($event, task)" [(ngModel)]="task.isCompleted">
+    {{task.title}}
+  </mat-checkbox>
+  <button mat-icon-button type="button" (click)="handleEdit(task)">
+    <mat-icon>edit</mat-icon>
+  </button>
+  <button mat-icon-button type="button" (click)="openDialogDelete(task)">
+    <mat-icon color="warn">delete</mat-icon>
+  </button>
+</div>
+}
+
+@if (checkedList.length > 0) {
+<div class="checkedList">
+  @if (checkedList.length === 1) {
+  <span>
+    {{checkedList.length}} item marked
+  </span>
+  }
+
+  @if (checkedList.length > 1) {
+  <span>
+    {{checkedList.length}} items marked
+  </span>
+  }
+
+  @for (task of checkedList; track task.id) {
+  <div
+    class="todo-item"
+    [@fadeInDownOnEnter]
+    [@fadeOutUpOnLeave]
+    [@headShake]="{ value: (animState && task.id == idTodoDeleting) }" 
+    (@headShake.done)="animDone()"
+  >
+    <mat-checkbox (change)="onCheckboxChange($event, task)" [(ngModel)]="task.isCompleted">
+      {{task.title}}
+    </mat-checkbox>
+    <button mat-icon-button type="button" (click)="openDialogDelete(task)">
+      <mat-icon color="warn">delete</mat-icon>
+    </button>
+  </div>
+  }
+</div>
+}
